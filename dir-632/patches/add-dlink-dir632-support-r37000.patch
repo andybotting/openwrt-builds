@@ -1,0 +1,243 @@
+Index: target/linux/ar71xx/base-files/etc/diag.sh
+===================================================================
+--- target/linux/ar71xx/base-files/etc/diag.sh	(revision 37000)
++++ target/linux/ar71xx/base-files/etc/diag.sh	(working copy)
+@@ -47,6 +47,9 @@
+ 	dir-615-e4)
+ 		status_led="d-link:green:power"
+ 		;;
++	dir-632-a1)
++		status_led="d-link:amber:power"
++		;;
+ 	dir-615-c1)
+ 		status_led="d-link:green:status"
+ 		;;
+Index: target/linux/ar71xx/base-files/etc/uci-defaults/01_leds
+===================================================================
+--- target/linux/ar71xx/base-files/etc/uci-defaults/01_leds	(revision 37000)
++++ target/linux/ar71xx/base-files/etc/uci-defaults/01_leds	(working copy)
+@@ -60,6 +60,12 @@
+ 	ucidef_set_led_switch "lan4" "LAN4" "d-link:green:lan4" "switch0" "0x10"
+ 	;;
+ 
++dir-632-a1)
++	ucidef_set_led_usbdev "usb" "USB" "d-link:green:usb" "1-1"
++	ucidef_set_led_netdev "wan" "WAN" "d-link:green:wan" "eth1"
++	ucidef_set_led_wlan "wlan" "WLAN" "d-link:green:wireless" "phy0tpt"
++	;;
++
+ dir-825-b1 | \
+ dir-825-c1)
+ 	ucidef_set_led_usbdev "usb" "USB" "d-link:blue:usb" "1-1"
+Index: target/linux/ar71xx/base-files/etc/uci-defaults/02_network
+===================================================================
+--- target/linux/ar71xx/base-files/etc/uci-defaults/02_network	(revision 37000)
++++ target/linux/ar71xx/base-files/etc/uci-defaults/02_network	(working copy)
+@@ -226,6 +226,14 @@
+ 	ucidef_set_interfaces_lan_wan "eth1" "eth0"
+ 	;;
+ 
++dir-632-a1)
++	ucidef_set_interfaces_lan_wan "eth0" "eth1"
++	ucidef_add_switch "switch0" "1" "1"
++	ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 4 5 6 7 8"
++  ;;
++
++
++
+ ap121 |\
+ ap121-mini |\
+ ap96 |\
+Index: target/linux/ar71xx/base-files/etc/uci-defaults/03_network-switchX-migration
+===================================================================
+--- target/linux/ar71xx/base-files/etc/uci-defaults/03_network-switchX-migration	(revision 37000)
++++ target/linux/ar71xx/base-files/etc/uci-defaults/03_network-switchX-migration	(working copy)
+@@ -57,6 +57,7 @@
+ ap96|\
+ airrouter|\
+ dir-600-a1|\
++dir-632-a1|\
+ dir-615-c1|\
+ dir-615-e4|\
+ ja76pf|\
+Index: target/linux/ar71xx/base-files/lib/ar71xx.sh
+===================================================================
+--- target/linux/ar71xx/base-files/lib/ar71xx.sh	(revision 37000)
++++ target/linux/ar71xx/base-files/lib/ar71xx.sh	(working copy)
+@@ -243,6 +243,9 @@
+ 	*"DIR-615 rev. E4")
+ 		name="dir-615-e4"
+ 		;;
++	*"DIR-632 rev. A1")
++		name="dir-632-a1"
++		;;
+ 	*"DIR-825 rev. B1")
+ 		name="dir-825-b1"
+ 		;;
+Index: target/linux/ar71xx/base-files/lib/upgrade/platform.sh
+===================================================================
+--- target/linux/ar71xx/base-files/lib/upgrade/platform.sh	(revision 37000)
++++ target/linux/ar71xx/base-files/lib/upgrade/platform.sh	(working copy)
+@@ -108,6 +108,7 @@
+ 	dir-600-a1 | \
+ 	dir-615-c1 | \
+ 	dir-615-e4 | \
++	dir-632-a1 | \
+ 	dir-825-c1 | \
+ 	dir-835-a1 | \
+ 	ew-dorin | \
+Index: target/linux/ar71xx/config-3.8
+===================================================================
+--- target/linux/ar71xx/config-3.8	(revision 37000)
++++ target/linux/ar71xx/config-3.8	(working copy)
+@@ -2,6 +2,27 @@
+ CONFIG_AG71XX_AR8216_SUPPORT=y
+ # CONFIG_AG71XX_DEBUG is not set
+ # CONFIG_AG71XX_DEBUG_FS is not set
++CONFIG_AG7240=y
++# CONFIG_AG7240_GE0_GMII is not set
++CONFIG_AG7240_GE0_IS_CONNECTED=y
++CONFIG_AG7240_GE0_MII=y
++# CONFIG_AG7240_GE0_RGMII is not set
++CONFIG_AG7240_GE1_IS_CONNECTED=y
++CONFIG_AG7240_GE1_MII=y
++CONFIG_AG7240_MAC_LOCATION=0x1fff0000
++CONFIG_AG7240_NUMBER_RX_PKTS=252
++CONFIG_AG7240_NUMBER_TX_PKTS=80
++# CONFIG_AG7240_USE_TRC is not set
++CONFIG_AR7240_S26_PHY=y
++# CONFIG_AR7240_S26_VLAN_IGMP is not set
++# CONFIG_AR7242_RGMII_PHY is not set
++CONFIG_AR7242_RTL8309G_PHY=y
++# CONFIG_AR7242_S16_PHY is not set
++# CONFIG_AR7242_VIR_PHY is not set
++# CONFIG_AR8021_PHY is not set
++CONFIG_AG7240_LEN_PER_TX_DS=1536
++CONFIG_AG7240_NUMBER_TX_PKTS=80
++CONFIG_AG7240_NUMBER_RX_PKTS=252
+ CONFIG_AR8216_PHY=y
+ CONFIG_ARCH_BINFMT_ELF_RANDOMIZE_PIE=y
+ CONFIG_ARCH_DISCARD_MEMBLOCK=y
+@@ -39,6 +60,7 @@
+ CONFIG_ATH79_MACH_DB120=y
+ CONFIG_ATH79_MACH_DIR_600_A1=y
+ CONFIG_ATH79_MACH_DIR_615_C1=y
++CONFIG_ATH79_MACH_DIR_632_A1=y
+ CONFIG_ATH79_MACH_DIR_825_B1=y
+ CONFIG_ATH79_MACH_DIR_825_C1=y
+ CONFIG_ATH79_MACH_EAP7660D=y
+@@ -101,6 +123,8 @@
+ CONFIG_ATH79_PCI_ATH9K_FIXUP=y
+ # CONFIG_ATH79_ROUTERBOOT is not set
+ # CONFIG_ATH79_WDT is not set
++# CONFIG_ATHEROS_HEADER_EN is not set
++# CONFIG_ATHRS_QOS is not set
+ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+ CONFIG_CEVT_R4K=y
+ CONFIG_CMDLINE="rootfstype=squashfs,yaffs,jffs2 noinitrd"
+@@ -191,12 +215,9 @@
+ CONFIG_MODULES_USE_ELF_REL=y
+ CONFIG_MTD_CFI_ADV_OPTIONS=y
+ CONFIG_MTD_CFI_GEOMETRY=y
+-# CONFIG_MTD_CFI_I2 is not set
+ # CONFIG_MTD_CFI_INTELEXT is not set
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_M25P80=y
+-# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
+-# CONFIG_MTD_MAP_BANK_WIDTH_4 is not set
+ CONFIG_MTD_MYLOADER_PARTS=y
+ CONFIG_MTD_PHYSMAP=y
+ CONFIG_MTD_REDBOOT_DIRECTORY_BLOCK=-2
+@@ -210,6 +231,7 @@
+ CONFIG_NET_DSA_MV88E6060=y
+ CONFIG_NET_DSA_MV88E6063=y
+ CONFIG_NET_DSA_TAG_TRAILER=y
++CONFIG_NET_SCH_FQ_CODEL=y
+ CONFIG_NO_GENERIC_PCI_IOPORT_MAP=y
+ CONFIG_PAGEFLAGS_EXTENDED=y
+ CONFIG_PCI=y
+@@ -225,6 +247,7 @@
+ CONFIG_RTL8366S_PHY=y
+ CONFIG_RTL8366_SMI=y
+ CONFIG_RTL8367_PHY=y
++# CONFIG_S26_SWITCH_ONLY_MODE is not set
+ # CONFIG_SCSI_DMA is not set
+ CONFIG_SERIAL_8250_NR_UARTS=1
+ CONFIG_SERIAL_8250_RUNTIME_UARTS=1
+Index: target/linux/ar71xx/files/arch/mips/include/asm/mach-ath79/ag71xx_platform.h
+===================================================================
+--- target/linux/ar71xx/files/arch/mips/include/asm/mach-ath79/ag71xx_platform.h	(revision 37000)
++++ target/linux/ar71xx/files/arch/mips/include/asm/mach-ath79/ag71xx_platform.h	(working copy)
+@@ -22,6 +22,12 @@
+ 	u8		phy_poll_mask;
+ };
+ 
++struct ag7240_platform_data {
++	u8		mac_addr1[ETH_ALEN];
++	u8		mac_addr2[ETH_ALEN];
++};
++
++
+ struct ag71xx_platform_data {
+ 	phy_interface_t	phy_if_mode;
+ 	u32		phy_mask;
+Index: target/linux/ar71xx/generic/profiles/d-link.mk
+===================================================================
+--- target/linux/ar71xx/generic/profiles/d-link.mk	(revision 37000)
++++ target/linux/ar71xx/generic/profiles/d-link.mk	(working copy)
+@@ -61,7 +61,18 @@
+ 
+ $(eval $(call Profile,DIR615E4))
+ 
++define Profile/DIR632A1
++	NAME:=D-Link DIR-632 rev. A1
++	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-usbdev
++endef
+ 
++define Profile/DIR632A1/Description
++	Package set optimized for the D-Link DIR-632 rev. A1
++endef
++
++$(eval $(call Profile,DIR632A1))
++
++
+ define Profile/DIR825B1
+ 	NAME:=D-Link DIR-825 rev. B1
+ 	PACKAGES:=kmod-usb-core kmod-usb-ohci kmod-usb2 kmod-ledtrig-usbdev
+Index: target/linux/ar71xx/image/Makefile
+===================================================================
+--- target/linux/ar71xx/image/Makefile	(revision 37000)
++++ target/linux/ar71xx/image/Makefile	(working copy)
+@@ -174,6 +174,7 @@
+ cameo934x_mtdlayout=mtdparts=spi0.0:64k(uboot)ro,64k(nvram)ro,1280k(kernel),14656k(rootfs),192k(lang)ro,64k(mac)ro,64k(art)ro,15936k@0x20000(firmware)
+ cap4200ag_mtdlayout=mtdparts=spi0.0:256k(u-boot),64k(u-boot-env),320k(custom)ro,1536k(kernel),12096k(rootfs),2048k(failsafe),64k(art),13632k@0xa0000(firmware)
+ db120_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,6336k(rootfs),1408k(kernel),64k(nvram),64k(art)ro,7744k@0x50000(firmware)
++dir632a1_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(nvram),1984k(linux),5568k(rootfs),64k(MAC),192k(LP),64k(ART)ro,7488k@0x50000(firmware) debug loglevel=8
+ dir825b1_mtdlayout=mtdparts=spi0.0:256k(uboot)ro,64k(config)ro,1024k(kernel),5184k(rootfs),64k(caldata)ro,1600k(unknown)ro,6208k@0x50000(firmware),64k@0x7f0000(caldata_copy)
+ dir825b1_mtdlayout_fat=mtdparts=spi0.0:256k(uboot)ro,64k(config)ro,1024k(kernel),6784k(rootfs),64k(caldata)ro,7808k@0x50000(firmware),64k@0x660000(caldata_orig),6208k@0x50000(firmware_orig)
+ ew-dorin_mtdlayout_4M=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env),1024k(kernel),2688k(rootfs),64k(art),3712k@0x50000(firmware)
+@@ -363,6 +364,15 @@
+ 	$(call MkuImageLzma/initramfs,$(2),$(3) $(cameo933x_mtdlayout))
+ endef
+ 
++define Image/Build/DIR632A1
++	$(call Image/Build/Cameo,$(1),$(2),$(3),$(dir632a1_mtdlayout),2031616,5636096,$(4))
++endef
++
++define Image/Build/DIR632A1/initramfs
++	$(call MkuImageLzma/initramfs,$(2),$(3) $(dir632a1_mtdlayout))
++endef
++
++
+ define Image/Build/Cameo934x
+ 	$(call Image/Build/Cameo,$(1),$(2),$(3),$(cameo934x_mtdlayout),1310720,15007718,$(4))
+ endef
+@@ -869,6 +879,8 @@
+ 
+ $(eval $(call SingleProfile,CyberTAN,$(fs_64k),WRT160NL,wrt160nl,WRT160NL,ttyS0,115200,1.00.01))
+ 
++$(eval $(call SingleProfile,DIR632A1,$(fs_squash),DIR632A1,dir-632-a1,DIR-632-A1,ttyS0,115200,"A101-AR7242-RT-100324-02"))
++
+ $(eval $(call SingleProfile,DIR825B1,$(fs_64k),DIR825B1,dir-825-b1,DIR-825-B1,ttyS0,115200,01AP94-AR7161-RT-080619-00,00AP94-AR7161-RT-080619-00))
+ $(eval $(call SingleProfile,DIR825B1,$(fs_64k),TEW673GRU,tew-673gru,TEW-673GRU,ttyS0,115200,01AP94-AR7161-RT-080619-01,00AP94-AR7161-RT-080619-01))
+ 
