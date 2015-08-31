@@ -9,7 +9,7 @@ ARCH=xrx200
 PROFILE=TDW8970
 
 # Extra packages
-PACKAGES="ddns-scripts iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev kmod-usb-net-asix ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos qos-scripts tcpdump-mini mwan3 luci-app-mwan3"
+PACKAGES="ddns-scripts ddns-scripts_no-ip_com iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev kmod-usb-net-asix ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos qos-scripts tcpdump-mini mwan3 luci-app-mwan3"
 
 # Include VDSL firmware and SSH keys, etc
 FILES=files

@@ -9,7 +9,7 @@ ARCH=generic
 PROFILE=MYNETN600
 
 # Extra packages
-PACKAGES="ddns-scripts igmpproxy iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos qos-scripts tcpdump-mini mwan3 luci-app-mwan3"
+PACKAGES="ddns-scripts ddns-scripts_no-ip_com iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos qos-scripts tcpdump-mini mwan3 luci-app-mwan3"
 
 # Include VDSL firmware and SSH keys, etc
 FILES=files
