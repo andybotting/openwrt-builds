@@ -10,7 +10,7 @@ PROFILE=TLWR1043
 OUTPUT_NAME=tl-wr1043nd-v1
 
 # Extra packages
-PACKAGES="ddns-scripts ddns-scripts_no-ip_com igmpproxy iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos qos-scripts tcpdump-mini mwan3 luci-app-mwan3"
+PACKAGES="ddns-scripts ddns-scripts_no-ip_com iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos qos-scripts tcpdump-mini mwan3 luci-app-mwan3"
 
 # Include VDSL firmware and SSH keys, etc
 FILES=files
@@ -40,8 +40,8 @@ mkdir files
 make image PROFILE=$PROFILE PACKAGES="$PACKAGES" FILES=$FILES
 
 [ -d ../builds ] || mkdir ../builds
-cp -r bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-sysupgrade.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-sysupgrade-imagebuilder.bin
-cp -r bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-factory.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-factory-imagebuilder.bin
+cp -v bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-sysupgrade.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-sysupgrade-imagebuilder.bin
+cp -v bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-factory.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-factory-imagebuilder.bin
 
 # Clean up
 cd ..

@@ -63,10 +63,10 @@ CONFIG_PACKAGE_luci-proto-ipv6=y
 CONFIG_PACKAGE_luci-proto-ppp=y
 
 CONFIG_PACKAGE_ddns-scripts=y
+CONFIG_PACKAGE_ddns-scripts_no-ip_com=y
 CONFIG_PACKAGE_iperf=y
 CONFIG_PACKAGE_qos-scripts=y
 CONFIG_PACKAGE_tcpdump-mini=y
-CONFIG_PACKAGE_igmpproxy=y
 EOF
 
 make defconfig

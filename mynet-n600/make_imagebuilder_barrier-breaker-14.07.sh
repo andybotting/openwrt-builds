@@ -7,7 +7,7 @@ NAME=barrier_breaker
 PROFILE=MYNETN600
 
 # Extra packages
-PACKAGES="ddns-scripts igmpproxy iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos netstat-nat qos-scripts slurm tcpdump-mini mwan3 luci-app-mwan3"
+PACKAGES="ddns-scripts iperf kmod-ledtrig-heartbeat kmod-ledtrig-usbdev ppp-mod-pppoe luci luci-app-ddns luci-app-firewall luci-app-qos netstat-nat qos-scripts slurm tcpdump-mini mwan3 luci-app-mwan3"
 
 # Include VDSL firmware and SSH keys, etc
 FILES=files
