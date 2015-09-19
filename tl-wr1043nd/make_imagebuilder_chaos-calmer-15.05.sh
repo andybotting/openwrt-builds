@@ -2,7 +2,7 @@
 
 set -e
 
-VER=15.05-rc3
+VER=15.05
 NAME=chaos_calmer
 TARGET=ar71xx
 ARCH=generic
@@ -36,20 +36,12 @@ mkdir files
 [ -d ../../files ] && cp -r ../../files/* files/
 [ -d ../files ] && cp -r ../files/* files/
 
-# Enable online repos for fetching extra packages
-> repositories.conf
-for REPO in base luci management packages routing telephony; do
-  echo "src/gz ${NAME}_${REPO} http://downloads.openwrt.org/${NAME}/${VER}/$TARGET/$ARCH/packages/${REPO}" >> repositories.conf
-done
-echo "src imagebuilder file:packages" >> repositories.conf
-
 # Build image
 make image PROFILE=$PROFILE PACKAGES="$PACKAGES" FILES=$FILES
 
 [ -d ../builds ] || mkdir ../builds
-mv -v bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-sysupgrade.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-sysupgrade-imagebuilder.image
-mv -v bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-factory.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-sysupgrade-imagebuilder-factory.image
-echo "New image at ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-imagebuilder.image"
+cp -r bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-sysupgrade.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-sysupgrade-imagebuilder.bin
+cp -r bin/${TARGET}/openwrt-${VER}-${TARGET}-${ARCH}-${OUTPUT_NAME}-squashfs-factory.bin ../builds/openwrt-${PROFILE}-${NAME}_${VER}-$(date --iso)-squashfs-factory-imagebuilder.bin
 
 # Clean up
 cd ..
